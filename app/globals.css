@@ -16,6 +16,9 @@
 
     --color-border-primary: #d4d4d4;
     --color-border-secondary: #a3a3a3;
+
+    /* Borders */
+    --border-radius: 16px;
 }
 
 /* Dark mode (system preference) */
