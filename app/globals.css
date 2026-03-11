@@ -4,9 +4,9 @@
 :root {
     /* Colors */
     --color-primary: #e9b935;
-    --color-primary-dark: #28200b;
+    --color-primary-dark: #e9b9352f;
 
-    --color-bg-primary: #ffffff;
+    --color-bg-primary: #fff9ea;
     --color-bg-secondary: #f5f5f5;
     --color-bg-tertiary: #e5e5e5;
 
@@ -25,7 +25,7 @@
 @media (prefers-color-scheme: dark) {
     :root {
         --color-primary: #e9b935;
-        --color-primary-dark: #28200b;
+        --color-primary-dark: #e9b9352f;
 
         --color-bg-primary: #110a04;
         --color-bg-secondary: #1d1d1d;
@@ -45,4 +45,31 @@ body {
     font-family: var(--font-primary), sans-serif;
     background-color: var(--color-bg-primary);
     color: var(--color-text-primary);
+}
+
+.main-title {
+    @apply text-3xl font-bold m-4;
+}
+
+h2 {
+    @apply text-2xl font-semibold;
+}
+
+p {
+    color: var(--color-text-secondary);
+}
+
+.primary-button {
+    border-radius: var(--border-radius);
+    color: black;
+    background-color: var(--color-primary);
+    @apply font-bold py-4 px-4 hover:bg-[var(--color-primary-dark)] hover:text-[var(--color-primary)] w-full flex justify-center items-center gap-2 text-lg;
+}
+
+.secondary-button {
+    border-radius: var(--border-radius);
+    color: var(--color-primary);
+    background-color: var(--color-primary-dark);
+    border: 2px solid var(--color-primary);
+    @apply font-bold py-4 px-4 hover:bg-[var(--color-primary)] hover:text-black w-full flex justify-center items-center gap-2 text-lg;
 }
