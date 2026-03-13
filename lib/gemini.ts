@@ -1,6 +1,11 @@
-export async function billExtraction(prompt: string, base64Image: string) {
+export async function billExtraction(prompt: string, base64Image: string, mimeType: string) {
     const apiKey = process.env.GOOGLE_API_KEY;
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+    if (!apiKey) {
+        throw new Error("GOOGLE_API_KEY is not set in environment variables");
+    }
+
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
     const response = await fetch(apiUrl, {
         method: "POST",
@@ -14,18 +19,22 @@ export async function billExtraction(prompt: string, base64Image: string) {
                         { text: prompt },
                         {
                             inline_data: {
-                                mime_type: "image/jpeg",
+                                mime_type: mimeType,
                                 data: base64Image,
                             },
                         },
                     ],
                 },
             ],
+            generationConfig: {
+                responseMimeType: "application/json",
+            },
         }),
     });
 
     if (!response.ok) {
-        throw new Error(`API request failed with status ${response.status}`);
+        const errorBody = await response.text();
+        throw new Error(`API request failed with status ${response.status}: ${errorBody}`);
     }
 
     const data = await response.json();

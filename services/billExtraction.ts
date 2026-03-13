@@ -42,14 +42,16 @@ You should return:
 `;
 
 export async function extractBillFromImage(
-    imageBuffer: Buffer
+    imageBuffer: Buffer,
+    mimeType: string,
 ): Promise<ExtractedBill> {
     try {
         const base64Image = imageBuffer.toString("base64");
 
-        const responseText = await billExtraction(prompt, base64Image);
+        const responseText = await billExtraction(prompt, base64Image, mimeType);
         const extractedData: ExtractedBill = JSON.parse(responseText);
 
+        console.log("Extracted bill data:", extractedData);
         return extractedData;
     } catch (error) {
         if (error instanceof SyntaxError) {

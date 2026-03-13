@@ -25,7 +25,7 @@ export async function POST(request: Request) {
         const arrayBuffer = await imageFile.arrayBuffer();
         const imageBuffer = Buffer.from(arrayBuffer);
 
-        const result = await extractBillFromImage(imageBuffer);
+        const result = await extractBillFromImage(imageBuffer, imageFile.type);
 
         return Response.json(result);
     } catch (error) {
