@@ -73,3 +73,32 @@ p {
     border: 2px solid var(--color-primary);
     @apply font-bold py-4 px-4 hover:bg-[var(--color-primary)] hover:text-black w-full flex justify-center items-center gap-2 text-lg;
 }
+
+.tertiary-button {
+    border-radius: var(--border-radius);
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border-secondary);
+    @apply font-bold py-4 px-4 hover:bg-[var(--color-border-primary)] hover:text-white w-full flex justify-center items-center gap-2 text-lg;
+}
+
+.main-card {
+    border-radius: var(--border-radius);
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-primary);
+    color: var(--color-text-primary);
+    @apply p-4;
+}
+
+.add-item-btn {
+    border-radius: var(--border-radius);
+    color: var(--color-primary);
+    border: 2px dashed var(--color-primary);
+    @apply font-bold py-4 px-4 hover:bg-[var(--color-primary)] hover:text-black w-full flex justify-center items-center gap-2 text-lg;
+}
+
+.bottom-menu {
+    background-color: #181513;
+    border-top: 1px solid var(--color-border-secondary);
+    @apply fixed bottom-0 left-0 w-full px-3 py-5;
+}
