@@ -8,9 +8,10 @@ import { useEffect, useState } from "react";
 
 interface ReviewBillProps {
     bill: ExtractedBill;
+    onTryAgain: () => void;
 }
 
-export default function ReviewBill({ bill }: ReviewBillProps) {
+export default function ReviewBill({ bill, onTryAgain }: ReviewBillProps) {
     const [billState, setBill] = useState(bill);
     const [isItemModalOpen, setIsItemModalOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState<BillItem | null>(null);
@@ -114,7 +115,7 @@ export default function ReviewBill({ bill }: ReviewBillProps) {
                     <span className="text-[var(--color-primary)] font-bold">{billState.currency} {subtotal.toFixed(2)}</span>
                 </div>
                 <div className="grid grid-cols-2 gap-3 items-center">
-                    <button className="tertiary-button">
+                    <button className="tertiary-button" onClick={onTryAgain}>
                         <LuMoveLeft size={26} /> Try Again
                     </button>
                     <button className="primary-button">

@@ -35,7 +35,13 @@ export default function Home() {
             )}
             
             {currentView === "review" && billItems && (
-                <ReviewBill bill={billItems} />
+                <ReviewBill
+                    bill={billItems}
+                    onTryAgain={() => {
+                        setBillItems(null);
+                        setCurrentView("upload");
+                    }}
+                />
             )}
         </main>
     );
