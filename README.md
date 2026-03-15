@@ -69,6 +69,109 @@ After image selection, it sends the image to the extraction API and returns stru
 - Error (`error !== null`):
 	- message shown in red text with extracted/fallback error text.
 
+## ReviewBill Component
+
+### Location
+
+- `components/ReviewBill.tsx`
+
+### Purpose
+
+`ReviewBill` is the bill validation and correction screen shown after OCR extraction. It allows users to:
+
+- review detected items and prices,
+- edit existing items,
+- add new items,
+- delete items,
+- confirm the final bill, or
+- restart extraction with "Try Again".
+
+### Props
+
+| Prop | Type | Required | Description |
+|------|------|----------|-------------|
+| `bill` | `ExtractedBill` | Yes | Initial extracted bill data to display and edit. |
+| `onConfirm` | `(updatedBill: ExtractedBill) => void` | Yes | Called when user confirms the reviewed bill. |
+| `onTryAgain` | `() => void` | Yes | Called when user wants to discard current review and re-upload/re-extract. |
+
+### Internal State
+
+| State | Type | Initial value | Description |
+|-------|------|---------------|-------------|
+| `billState` | `ExtractedBill` | `bill` prop | Local editable copy of the bill being reviewed. |
+| `isItemModalOpen` | `boolean` | `false` | Controls visibility of item modal. |
+| `selectedItem` | `BillItem \| null` | `null` | Stores current item being edited. |
+| `modalMode` | `"edit" \| "add"` | `"edit"` | Determines modal behavior and action buttons. |
+
+### Lifecycle Behavior
+
+- A `useEffect` watcher syncs `billState` whenever the incoming `bill` prop changes.
+- This ensures the review screen reflects newly extracted data if parent state updates.
+
+### Derived Values
+
+- `subtotal` is recalculated each render from `billState.items`:
+  - reduce over all item prices
+  - displayed with two decimals via `toFixed(2)`
+  - shown with active bill currency.
+
+### Item Management Handlers
+
+1. `handleOpenEdit(item)`:
+	- opens modal,
+	- sets selected item,
+	- switches mode to `edit`.
+2. `handleOpenAdd()`:
+	- clears selected item,
+	- switches mode to `add`,
+	- opens modal.
+3. `handleSaveItem(updatedItem)`:
+	- in `add` mode, appends a new item to `billState.items`.
+	- in `edit` mode, updates matching item by `id`.
+4. `handleDeleteItem(itemId)`:
+	- removes item from `billState.items` by `id`.
+
+### Modal Integration
+
+`ReviewBill` renders `EditItemModal` (`components/modals/ItemModal.tsx`) conditionally when:
+
+- modal is open, and
+- either mode is `add` or an editable item exists.
+
+Modal callbacks wired by parent:
+
+- `onSave` -> `handleSaveItem`
+- `onDelete` -> `handleDeleteItem`
+- `onClose` -> closes modal and clears `selectedItem`.
+
+### UI Structure
+
+- Header: "Review Bill"
+- Summary row: number of currently tracked items
+- Item list cards:
+  - item name
+  - currency + price
+  - Edit button
+- Add Item action button
+- Fixed bottom action menu:
+  - subtotal display
+  - Try Again button
+  - Confirm button.
+
+### User Actions and Outcomes
+
+- Edit item: updates the matching `id` entry.
+- Add item: creates a new item and expands list.
+- Delete item: removes selected row from list.
+- Try Again: triggers `onTryAgain()` without confirming local edits.
+- Confirm: triggers `onConfirm(billState)` with latest reviewed/modified bill.
+
+### Notes
+
+- Item count and subtotal always reflect current `billState`.
+- Confirm always sends the current local state, not the original `bill` prop.
+- Currency label is rendered from `billState.currency` for consistency across rows and subtotal.
+
 ## Style Guide
 
 ### CSS Variables
