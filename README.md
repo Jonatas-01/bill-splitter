@@ -11,8 +11,8 @@ The application uses CSS custom properties defined in `app/globals.css` with aut
 | Variable | Light Mode | Dark Mode | Usage |
 |----------|------------|-----------|-------|
 | `--color-primary` | `#e9b935` | `#e9b935` | Primary accent color |
-| `--color-primary-dark` | `#28200b` | `#28200b` | Dark variant of primary |
-| `--color-bg-primary` | `#ffffff` | `#110a04` | Main background |
+| `--color-primary-dark` | `#e9b9352f` | `#e9b9352f` | Dark variant of primary |
+| `--color-bg-primary` | `#fff9ea` | `#110a04` | Main background |
 | `--color-bg-secondary` | `#f5f5f5` | `#1d1d1d` | Secondary background (e.g., cards, modals) |
 | `--color-bg-tertiary` | `#e5e5e5` | `#313131` | Tertiary background |
 | `--color-text-primary` | `#1a1a1a` | `#ffffff` | Main text |
