@@ -8,10 +8,11 @@ import { useEffect, useState } from "react";
 
 interface ReviewBillProps {
     bill: ExtractedBill;
+    onConfirm: (updatedBill: ExtractedBill) => void;
     onTryAgain: () => void;
 }
 
-export default function ReviewBill({ bill, onTryAgain }: ReviewBillProps) {
+export default function ReviewBill({ bill, onConfirm, onTryAgain }: ReviewBillProps) {
     const [billState, setBill] = useState(bill);
     const [isItemModalOpen, setIsItemModalOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState<BillItem | null>(null);
@@ -118,7 +119,7 @@ export default function ReviewBill({ bill, onTryAgain }: ReviewBillProps) {
                     <button className="tertiary-button" onClick={onTryAgain}>
                         <LuMoveLeft size={26} /> Try Again
                     </button>
-                    <button className="primary-button">
+                    <button className="primary-button" onClick={() => onConfirm(billState)}>
                         Confirm <LuMoveRight size={26} />
                     </button>
                 </div>
