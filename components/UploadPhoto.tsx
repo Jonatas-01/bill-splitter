@@ -52,7 +52,7 @@ export default function UploadPhoto({ onSuccess }: UploadPhotoProps) {
     }
 
     return (
-        <div className="flex flex-col items-center w-full">
+        <div>
             <div className="flex justify-center w-full mb-10">
                 <h1 className="main-title">Add Bill</h1>
             </div>

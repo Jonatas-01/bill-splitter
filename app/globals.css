@@ -82,6 +82,14 @@ p {
     @apply font-bold py-4 px-4 hover:bg-[var(--color-border-primary)] hover:text-white w-full flex justify-center items-center gap-2 text-lg;
 }
 
+.delete-button {
+    border-radius: var(--border-radius);
+    color: #B40707;
+    background-color: transparent;
+    border: 2px solid #B40707;
+    @apply font-bold py-4 px-4 hover:bg-[#B40707] hover:text-white w-full flex justify-center items-center gap-2 text-lg;
+}
+
 .main-card {
     border-radius: var(--border-radius);
     background-color: var(--color-bg-secondary);
@@ -100,5 +108,10 @@ p {
 .bottom-menu {
     background-color: #181513;
     border-top: 1px solid var(--color-border-secondary);
-    @apply fixed bottom-0 left-0 w-full px-3 py-5;
+}
+
+.modal-content {
+    background-color: #171101;
+    border: 1px solid #705818;
+    border-radius: var(--border-radius);
 }
