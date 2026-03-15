@@ -48,10 +48,26 @@ export async function extractBillFromImage(
     try {
         const base64Image = imageBuffer.toString("base64");
 
-        const responseText = await billExtraction(prompt, base64Image, mimeType);
-        const extractedData: ExtractedBill = JSON.parse(responseText);
+        const responseText = await billExtraction(
+            prompt,
+            base64Image,
+            mimeType,
+        );
+        const parsedData = JSON.parse(responseText) as Omit<
+            ExtractedBill,
+            "items"
+        > & {
+            items: Array<Omit<ExtractedBill["items"][number], "id">>;
+        };
 
-        console.log("Extracted bill data:", extractedData);
+        const extractedData: ExtractedBill = {
+            ...parsedData,
+            items: parsedData.items.map((item) => ({
+                ...item,
+                id: crypto.randomUUID(),
+            })),
+        };
+
         return extractedData;
     } catch (error) {
         if (error instanceof SyntaxError) {
