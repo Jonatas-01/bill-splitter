@@ -79,7 +79,7 @@ export default function ReviewBill({ bill, onConfirm, onTryAgain }: ReviewBillPr
                             <span className="font-bold text-start">{item.price.toFixed(2)}</span>
                             <button
                                 type="button"
-                                className="font-bold text-[var(--color-primary)] bg-[var(--color-primary-dark)] px-3 py-1 rounded-full flex items-center gap-1 cursor-pointer"
+                                className="font-bold text-[var(--color-primary)] bg-[var(--color-primary-dark)] px-3 py-1 rounded-full flex items-center gap-1 cursor-pointer active:bg-[var(--color-primary)] active:text-black"
                                 onClick={() => handleOpenEdit(item)}
                             >
                                 <RiPencilLine size={22} /> Edit
@@ -89,7 +89,7 @@ export default function ReviewBill({ bill, onConfirm, onTryAgain }: ReviewBillPr
                 ))}
 
                 <div>
-                    <button className="add-item-btn w-full" onClick={handleOpenAdd}>
+                    <button className="add-item-btn w-full active:bg-[var(--color-primary)] active:text-black" onClick={handleOpenAdd}>
                         <BsPlusLg size={22} /> Add Item
                     </button>
                 </div>

@@ -63,7 +63,7 @@ p {
     border-radius: var(--border-radius);
     color: black;
     background-color: var(--color-primary);
-    @apply font-bold py-4 px-4 hover:bg-[var(--color-primary-dark)] hover:text-[var(--color-primary)] w-full flex justify-center items-center gap-2 text-lg;
+    @apply font-bold py-4 px-4 hover:bg-[var(--color-primary-dark)] hover:text-[var(--color-primary)] w-full flex justify-center items-center gap-2 text-lg active:bg-[var(--color-primary-dark)] active:text-[var(--color-primary)];
 }
 
 .secondary-button {
@@ -71,7 +71,7 @@ p {
     color: var(--color-primary);
     background-color: var(--color-primary-dark);
     border: 2px solid var(--color-primary);
-    @apply font-bold py-4 px-4 hover:bg-[var(--color-primary)] hover:text-black w-full flex justify-center items-center gap-2 text-lg;
+    @apply font-bold py-4 px-4 hover:bg-[var(--color-primary)] hover:text-black w-full flex justify-center items-center gap-2 text-lg active:bg-[var(--color-primary)] active:text-black;
 }
 
 .tertiary-button {
@@ -79,7 +79,7 @@ p {
     color: var(--color-text-primary);
     background-color: var(--color-bg-tertiary);
     border: 1px solid var(--color-border-secondary);
-    @apply font-bold py-4 px-4 hover:bg-[var(--color-border-primary)] hover:text-white w-full flex justify-center items-center gap-2 text-lg;
+    @apply font-bold py-4 px-4 hover:bg-[var(--color-border-primary)] hover:text-white w-full flex justify-center items-center gap-2 text-lg active:bg-[var(--color-border-secondary)];
 }
 
 .delete-button {
@@ -87,7 +87,7 @@ p {
     color: #B40707;
     background-color: transparent;
     border: 2px solid #B40707;
-    @apply font-bold py-4 px-4 hover:bg-[#B40707] hover:text-white w-full flex justify-center items-center gap-2 text-lg;
+    @apply font-bold py-4 px-4 hover:bg-[#B40707] hover:text-white w-full flex justify-center items-center gap-2 text-lg active:bg-[#B40707] active:text-white;
 }
 
 .main-card {
@@ -102,7 +102,7 @@ p {
     border-radius: var(--border-radius);
     color: var(--color-primary);
     border: 2px dashed var(--color-primary);
-    @apply font-bold py-4 px-4 hover:bg-[var(--color-primary)] hover:text-black w-full flex justify-center items-center gap-2 text-lg;
+    @apply font-bold py-4 px-4 hover:bg-[var(--color-primary)] hover:text-black w-full flex justify-center items-center gap-2 text-lg active:bg-[var(--color-primary)] active:text-black;
 }
 
 .bottom-menu {
