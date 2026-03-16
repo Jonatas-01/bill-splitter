@@ -5,7 +5,7 @@ import { RxRowSpacing } from "react-icons/rx";
 import { BsShadows } from "react-icons/bs";
 import { useState } from "react";
 import type { ExtractedBill } from "@/types/bill";
-import ReviewBillLoading from "./loadings/UploadPhotoLoading";
+import ReviewBillLoading from "./loadings/ReviewBillLoading";
 
 interface UploadPhotoProps {
     onSuccess: (bill: ExtractedBill) => void;

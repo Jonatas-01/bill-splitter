@@ -45,7 +45,7 @@ export default function EditItemModal({ mode, item, onSave, onDelete, onClose }:
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-3">
-            <div className="modal-content w-full max-w-md">
+            <div className="modal-content w-full max-w-sm">
                 <div className="flex justify-between items-center mb-4 border-b border-[#705818] p-6">
                     <h2 className="text-xl font-bold text-[var(--color-primary)]">{mode === "edit" ? "Edit Item" : "Add Item"}</h2>
                     <button onClick={onClose}>
