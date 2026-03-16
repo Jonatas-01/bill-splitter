@@ -73,6 +73,8 @@ After image selection, it sends the image to the extraction API and returns stru
 
 ### Location
 
+![ReviewBill](./public/document-images/ReviewBill.png)
+
 - `components/ReviewBill.tsx`
 
 ### Purpose
