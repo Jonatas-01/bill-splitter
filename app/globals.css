@@ -36,7 +36,7 @@
         --color-text-tertiary: #6d6d6d;
 
         --color-border-primary: #383838;
-        --color-border-secondary: #6D6D6D;
+        --color-border-secondary: #6d6d6d;
     }
 }
 
@@ -84,9 +84,9 @@ p {
 
 .delete-button {
     border-radius: var(--border-radius);
-    color: #B40707;
+    color: #b40707;
     background-color: transparent;
-    border: 2px solid #B40707;
+    border: 2px solid #b40707;
     @apply font-bold py-4 px-4 hover:bg-[#B40707] hover:text-white w-full flex justify-center items-center gap-2 text-lg active:bg-[#B40707] active:text-white;
 }
 
@@ -114,4 +114,29 @@ p {
     background-color: #171101;
     border: 1px solid #705818;
     border-radius: var(--border-radius);
+}
+
+.loading-skeleton {
+    background-color: #252525;
+    @apply animate-pulse;
+}
+
+.inner-loading-skeleton {
+    background-color: #2c2c2c;
+    @apply animate-pulse;
+}
+
+.primary-button-loading {
+    border-radius: var(--border-radius);
+    color: black;
+    background-color: #e9b93568;
+    @apply font-bold py-4 px-4 w-full flex justify-center items-center gap-2 text-lg;
+}
+
+.tertiary-button-loading {
+    border-radius: var(--border-radius);
+    color: var(--color-text-secondary);
+    background-color: #31313168;
+    border: 1px solid var(--color-border-secondary);
+    @apply font-bold py-4 px-4 w-full flex justify-center items-center gap-2 text-lg;
 }

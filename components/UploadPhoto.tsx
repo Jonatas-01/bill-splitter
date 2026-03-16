@@ -5,6 +5,7 @@ import { RxRowSpacing } from "react-icons/rx";
 import { BsShadows } from "react-icons/bs";
 import { useState } from "react";
 import type { ExtractedBill } from "@/types/bill";
+import ReviewBillLoading from "./loadings/UploadPhotoLoading";
 
 interface UploadPhotoProps {
     onSuccess: (bill: ExtractedBill) => void;
@@ -51,6 +52,10 @@ export default function UploadPhoto({ onSuccess }: UploadPhotoProps) {
 
     }
 
+    if (isLoading) {
+        return <ReviewBillLoading />;
+    }
+
     return (
         <div>
             <div className="flex justify-center w-full mb-10">
@@ -91,13 +96,6 @@ export default function UploadPhoto({ onSuccess }: UploadPhotoProps) {
                     <IoImagesOutline size={30} /> Upload from Gallery
                 </label>
             </div>
-
-            {/* Loading Message */}
-            {isLoading && (
-                <div className="m-4 text-gray-500">
-                    Processing your bill...
-                </div>
-            )}
 
             {/* Error Message */}
             {error && (
