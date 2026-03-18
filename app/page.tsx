@@ -3,16 +3,17 @@
 import { useState } from "react";
 import UploadPhoto from "@/components/UploadPhoto";
 import ReviewBill from "@/components/ReviewBill";
+import AddPeople from "@/components/AddPeople";
 import type { ExtractedBill } from "@/types/bill";
-import ReviewBillLoading from "@/components/loadings/ReviewBillLoading";
 
 
 export default function Home() {
     const [currentView, setCurrentView] = useState<"upload" | "review" | "addPeople">("upload");
     const [billItems, setBillItems] = useState<ExtractedBill | null>(null);
+    const [people, setPeople] = useState<string[]>([]);
 
     return (
-        <main className="px-3 md:max-w-md flex flex-col items-center justify-center w-full mx-auto">
+        <main className="px-3 sm:max-w-md flex flex-col items-center justify-center w-full mx-auto">
             {/* <ReviewBill bill={{
                 "restaurantName": "Pizza Express",
                 "items": [
@@ -26,6 +27,7 @@ export default function Home() {
                 ],
                 "serviceChargePercent": 12.5,
                 "currency": "£"}} /> */}
+
             {currentView === "upload" && (
                 <UploadPhoto
                     onSuccess={(bill) => {
@@ -47,6 +49,10 @@ export default function Home() {
                         setCurrentView("upload");
                     }}
                 />
+            )}
+
+            {currentView === "addPeople" && (
+                <AddPeople />
             )}
         </main>
     );

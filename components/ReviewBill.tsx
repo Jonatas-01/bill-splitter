@@ -110,7 +110,7 @@ export default function ReviewBill({ bill, onConfirm, onTryAgain }: ReviewBillPr
             )}
 
             {/* Bottom Menu */}
-            <div className="bottom-menu md:max-w-md w-full fixed bottom-0 left-0 right-0 mx-auto px-3 py-4">
+            <div className="bottom-menu sm:max-w-md w-full fixed bottom-0 left-0 right-0 mx-auto px-3 py-4">
                 <div className="flex justify-between items-center mb-3">
                     <span className="font-bold">Subtotal</span>
                     <span className="text-[var(--color-primary)] font-bold">{billState.currency} {subtotal.toFixed(2)}</span>
