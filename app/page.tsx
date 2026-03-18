@@ -52,7 +52,9 @@ export default function Home() {
             )}
 
             {currentView === "addPeople" && (
-                <AddPeople />
+                <AddPeople 
+                    onBack={() => setCurrentView("review")}
+                />
             )}
         </main>
     );

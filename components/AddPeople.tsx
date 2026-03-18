@@ -1,7 +1,11 @@
 import { RiDeleteBin6Line } from "react-icons/ri";;
 import { LuMoveLeft, LuMoveRight } from "react-icons/lu";
 
-export default function AddPeople() {
+interface AddPeopleProps {
+    onBack: () => void;
+}
+
+export default function AddPeople({ onBack }: AddPeopleProps) {
     const people = [
         {
             "name": "Jonatas",
@@ -62,7 +66,7 @@ export default function AddPeople() {
                         {people.map((person) => (
                             <div className="main-card flex items-center justify-between grid grid-cols-5" key={person.id}>
                                 <span
-                                    className="text-black font-bold rounded-full w-12 h-12 flex items-center justify-center col-span-1"
+                                    className="text-black font-bold rounded-full w-10 h-10 flex items-center justify-center col-span-1"
                                     style={{ backgroundColor: person.color }}
                                 >
                                     {person.name.trim().charAt(0).toUpperCase()}
@@ -85,7 +89,7 @@ export default function AddPeople() {
 
             <div className="mt-6 bottom-menu sm:max-w-md w-full fixed bottom-0 left-0 right-0 mx-auto px-3 py-4">
                 <div className="grid grid-cols-2 gap-6 items-center my-2">
-                    <button className="tertiary-button">
+                    <button className="tertiary-button" onClick={onBack}>
                         <LuMoveLeft size={26} /> Back
                     </button>
                     <button className="primary-button" >
