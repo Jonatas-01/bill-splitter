@@ -5,12 +5,13 @@ import UploadPhoto from "@/components/UploadPhoto";
 import ReviewBill from "@/components/ReviewBill";
 import AddPeople from "@/components/AddPeople";
 import type { ExtractedBill } from "@/types/bill";
+import type { Person } from "@/types/person";
 
 
 export default function Home() {
     const [currentView, setCurrentView] = useState<"upload" | "review" | "addPeople">("upload");
     const [billItems, setBillItems] = useState<ExtractedBill | null>(null);
-    const [people, setPeople] = useState<string[]>([]);
+    const [people, setPeople] = useState<Person[]>([]);
 
     return (
         <main className="px-3 sm:max-w-md flex flex-col items-center justify-center w-full mx-auto">
@@ -54,6 +55,10 @@ export default function Home() {
             {currentView === "addPeople" && (
                 <AddPeople 
                     onBack={() => setCurrentView("review")}
+                    onNext={(people) => {
+                        setPeople(people);
+                        console.log("People added:", people);
+                    }}
                 />
             )}
         </main>

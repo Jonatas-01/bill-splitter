@@ -1,33 +1,17 @@
 import { RiDeleteBin6Line } from "react-icons/ri";;
 import { LuMoveLeft, LuMoveRight } from "react-icons/lu";
+import { useState, useEffect } from "react";
+import { Person } from "@/types/person";
 
 interface AddPeopleProps {
     onBack: () => void;
+    onNext: (people: Person[]) => void;
 }
 
-export default function AddPeople({ onBack }: AddPeopleProps) {
-    const people = [
-        {
-            "name": "Jonatas",
-            "id": "01",
-            "color": "#E9B935"
-        },
-        {
-            "name": "Sabrina",
-            "id": "02",
-            "color": "#359EE9"
-        },
-        {
-            "name": "Kael",
-            "id": "03",
-            "color": "#E95335"
-        },
-        {
-            "name": "Clarice",
-            "id": "04",
-            "color": "#35E97B"
-        }
-    ];
+export default function AddPeople({ onBack, onNext }: AddPeopleProps) {
+    const [name, setName] = useState("");
+    const [people, setPeople] = useState<Person[]>([]);
+    const [error, setError] = useState<string | null>(null);
 
     const colors = [
         "#E9B935",
@@ -38,11 +22,64 @@ export default function AddPeople({ onBack }: AddPeopleProps) {
         "#E935A8",
     ];
 
+    useEffect(() => {
+        if (!error) return;
+
+        const timeoutId = setTimeout(() => {
+            setError(null);
+        }, 4000);
+
+        return () => clearTimeout(timeoutId);
+    }, [error]);
+
+    function handleAddPerson(name: string) {
+        if (!name.trim()) {
+            setError("Name cannot be empty.");
+            return;
+        }
+        if (name.length > 20) {
+            setError("Name should be less than 20 characters.");
+            return;
+        }
+
+        const newPerson: Person = {
+            "id": Date.now().toString(),
+            "name": name,
+            "color": colors[people.length % colors.length]
+        };
+        setPeople([...people, newPerson]);
+        setName("");
+        setError(null);
+    }
+
+    function handleDeletePerson(personId: string) {
+        setPeople(
+            people.filter((person) => personId !== person.id)
+        );
+    }
+
+    function handleOnNext(people: Person[]) {
+        if (people.length < 2) {
+            setError("Add at least two people to proceed.");
+            return;
+        }
+        onNext(people);
+    }
 
     return (
         <div className="w-full pb-32">
             <div className="flex justify-center w-full mb-6">
                 <h1 className="main-title">Add People</h1>
+            </div>
+
+            <div className="fixed top-5 left-0 right-0 z-50 flex justify-center px-3 pointer-events-none">
+                <div
+                    className={` max-w-md rounded-full border border-red-900 bg-red-950 p-3 px-5 text-center text-sm font-bold text-red-100 shadow-lg transition-all duration-300 ${error ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"}`}
+                    role="alert"
+                    aria-live="assertive"
+                >
+                    {error}
+                </div>
             </div>
 
             <div>
@@ -52,8 +89,13 @@ export default function AddPeople({ onBack }: AddPeopleProps) {
                         type="text"
                         placeholder="e.g, John Doe"
                         className="input-field col-span-3"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                     />
-                    <button className="bg-[var(--color-primary)] text-black font-bold border rounded-lg col-span-1 active:bg-[var(--color-primary-dark)] active:text-white">
+                    <button
+                        className="bg-[var(--color-primary)] text-black font-bold border rounded-lg col-span-1 active:bg-[var(--color-primary-dark)] active:text-white"
+                        onClick={() => { handleAddPerson(name) }}
+                    >
                         Add
                     </button>
                 </div>
@@ -72,11 +114,11 @@ export default function AddPeople({ onBack }: AddPeopleProps) {
                                     {person.name.trim().charAt(0).toUpperCase()}
                                 </span>
                                 <span className="text-white col-span-3 text-lg">{person.name}</span>
-                                <span className="text-red-500 cursor-pointer col-span-1 flex justify-center flex justify-center py-3 px-1 items-center rounded-full active:bg-red-500 active:text-white" onClick={() => {
-                                    // Handle delete functionality
-                                }}>
+                                <button
+                                    className="text-red-500 cursor-pointer col-span-1 flex justify-center flex justify-center py-3 px-1 items-center rounded-full active:bg-red-500 active:text-white"
+                                    onClick={() => { handleDeletePerson(person.id) }}>
                                     <RiDeleteBin6Line size={24} />
-                                </span>
+                                </button>
                             </div>
                         ))}
                     </div>
@@ -92,7 +134,7 @@ export default function AddPeople({ onBack }: AddPeopleProps) {
                     <button className="tertiary-button" onClick={onBack}>
                         <LuMoveLeft size={26} /> Back
                     </button>
-                    <button className="primary-button" >
+                    <button className="primary-button" onClick={() => handleOnNext(people)}>
                         Next <LuMoveRight size={26} />
                     </button>
                 </div>
