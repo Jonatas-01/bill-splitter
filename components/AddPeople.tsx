@@ -4,13 +4,14 @@ import { useState, useEffect } from "react";
 import { Person } from "@/types/person";
 
 interface AddPeopleProps {
+    getPeople: Person[];
     onBack: () => void;
     onNext: (people: Person[]) => void;
 }
 
-export default function AddPeople({ onBack, onNext }: AddPeopleProps) {
+export default function AddPeople({ getPeople, onBack, onNext }: AddPeopleProps) {
     const [name, setName] = useState("");
-    const [people, setPeople] = useState<Person[]>([]);
+    const [people, setPeople] = useState<Person[]>(getPeople);
     const [error, setError] = useState<string | null>(null);
 
     const colors = [
