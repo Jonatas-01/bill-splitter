@@ -17,6 +17,7 @@ export default function ReviewBill({ bill, onConfirm, onTryAgain }: ReviewBillPr
     const [isItemModalOpen, setIsItemModalOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState<BillItem | null>(null);
     const [modalMode, setModalMode] = useState<"edit" | "add">("edit");
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         setBill(bill);
@@ -60,10 +61,38 @@ export default function ReviewBill({ bill, onConfirm, onTryAgain }: ReviewBillPr
         }));
     }
 
+    function onConfirmClick() {
+        if (billState.items.length === 0) {
+            setError("The bill must have at least one item.");
+            return;
+        }
+        onConfirm(billState);
+    }
+
+    useEffect(() => {
+        if (!error) return;
+
+        const timeoutId = setTimeout(() => {
+            setError(null);
+        }, 4000);
+
+        return () => clearTimeout(timeoutId);
+    }, [error]);
+
     return (
         <div>
             <div className="flex justify-center w-full mb-6">
                 <h1 className="main-title">Review Bill</h1>
+            </div>
+
+            <div className="fixed top-5 left-0 right-0 z-50 flex justify-center px-3 pointer-events-none">
+                <div
+                    className={` max-w-md rounded-full border border-red-900 bg-red-950 p-3 px-5 text-center text-sm font-bold text-red-100 shadow-lg transition-all duration-300 ${error ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"}`}
+                    role="alert"
+                    aria-live="assertive"
+                >
+                    {error}
+                </div>
             </div>
 
             <div className="text-center mb-3">
@@ -119,7 +148,7 @@ export default function ReviewBill({ bill, onConfirm, onTryAgain }: ReviewBillPr
                     <button className="tertiary-button" onClick={onTryAgain}>
                         <LuMoveLeft size={26} /> Try Again
                     </button>
-                    <button className="primary-button" onClick={() => onConfirm(billState)}>
+                    <button className="primary-button" onClick={onConfirmClick}>
                         Confirm <LuMoveRight size={26} />
                     </button>
                 </div>
