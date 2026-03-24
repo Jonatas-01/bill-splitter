@@ -10,13 +10,12 @@ import type { Person } from "@/types/person";
 
 
 export default function Home() {
-    const [currentView, setCurrentView] = useState<"upload" | "review" | "addPeople" | "assignDishes" | "summary">("upload");
-    const [billItems, setBillItems] = useState<ExtractedBill | null>(null);
-    const [people, setPeople] = useState<Person[]>([]);
+    const [currentView, setCurrentView] = useState<"upload" | "review" | "addPeople" | "assignDishes" | "summary">("assignDishes");
+    // const [billItems, setBillItems] = useState<ExtractedBill | null>(null);
+    // const [people, setPeople] = useState<Person[]>([]);
 
-    return (
-        <main className="px-3 sm:max-w-md flex flex-col items-center justify-center w-full mx-auto">
-            {/* <ReviewBill bill={{
+    // Mock data for development
+    const [billItems, setBillItems] = useState<ExtractedBill | null>({
                 "restaurantName": "Pizza Express",
                 "items": [
                     { "id": "1", "name": "Mushroom Pizza", "price": 12.99 },
@@ -28,9 +27,16 @@ export default function Home() {
                     { "id": "7", "name": "Pesto & Tomato Pasta", "price": 11.99 },
                 ],
                 "serviceChargePercent": 12.5,
-                "currency": "£"}} /> */}
+                "currency": "£"});
+    const [people, setPeople] = useState<Person[]>([
+        { "id": "1", "name": "Alice", "color": "#E9B935" },
+        { "id": "2", "name": "Bob", "color": "#359EE9" },
+        { "id": "3", "name": "Charlie", "color": "#E95335" },
+    ]);
 
-            {currentView === "upload" && (
+    return (
+        <main className="px-3 sm:max-w-md flex flex-col items-center justify-center w-full mx-auto">
+            {/* {currentView === "upload" && (
                 <UploadPhoto
                     onSuccess={(bill) => {
                         setBillItems(bill);
@@ -62,7 +68,7 @@ export default function Home() {
                         setCurrentView("assignDishes");
                     }}
                 />
-            )}
+            )} */}
 
             {currentView === "assignDishes" && billItems && people.length > 0 && (
                 <AssignDishes

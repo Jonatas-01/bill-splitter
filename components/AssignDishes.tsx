@@ -152,7 +152,22 @@ export default function AssignDishes({ people, bill, onUpdateBill, onBack, onNex
                             <div key={item.id} className="main-card flex items-center justify-between">
                                 <div>
                                     <h4 className="font-bold text-lg">{item.name}</h4>
-                                    <p className="text-[var(--color-text-secondary)]">{bill.currency} {item.price.toFixed(2)}</p>
+                                    <p className="text-[var(--color-text-secondary)] flex">
+                                        <span className="mr-3">{bill.currency} {item.price.toFixed(2)}</span>
+                                        {item.assignedTo?.map((name) => {
+                                            const assignedPerson = people.find((person) => person.name === name);
+
+                                            return (
+                                                <span
+                                                    key={name}
+                                                    className="text-black font-bold w-6 h-6 flex items-center justify-center rounded-full text-sm"
+                                                    style={{ backgroundColor: assignedPerson?.color ?? "var(--color-primary-dark)" }}
+                                                >
+                                                    {name.trim().charAt(0).toUpperCase()}
+                                                </span>
+                                            );
+                                        })}
+                                    </p>
                                 </div>
 
                                 {isSelectedAssigned && (
@@ -187,7 +202,7 @@ export default function AssignDishes({ people, bill, onUpdateBill, onBack, onNex
                     <span className="text-[var(--color-text-secondary)] font-bold">/ {bill.currency}{subtotal.toFixed(2)}</span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-6 items-center my-2">
+                <div className="grid grid-cols-2 gap-6 items-center my-1">
                     <button className="tertiary-button" onClick={onBack}>
                         <LuMoveLeft size={26} /> Back
                     </button>
