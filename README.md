@@ -174,6 +174,108 @@ Modal callbacks wired by parent:
 - Confirm always sends the current local state, not the original `bill` prop.
 - Currency label is rendered from `billState.currency` for consistency across rows and subtotal.
 
+## AddPeople Component
+
+### Location
+
+- `components/AddPeople.tsx`
+
+### Purpose
+
+`AddPeople` collects and manages the list of participants who will share the bill. It allows users to:
+
+- add people by name,
+- remove added people,
+- review total participants,
+- go back to the previous step, and
+- continue only when at least two people are present.
+
+### Props
+
+| Prop | Type | Required | Description |
+|------|------|----------|-------------|
+| `getPeople` | `Person[]` | Yes | Initial list used to seed local participant state. |
+| `onBack` | `() => void` | Yes | Navigates to the previous step. |
+| `onNext` | `(people: Person[]) => void` | Yes | Called with current people list when validation passes. |
+
+### Internal State
+
+| State | Type | Initial value | Description |
+|-------|------|---------------|-------------|
+| `name` | `string` | `""` | Controlled value for the name input field. |
+| `people` | `Person[]` | `getPeople` prop | Local editable list of added participants. |
+| `error` | `string \| null` | `null` | Temporary alert message for validation/flow errors. |
+
+### Color Assignment
+
+- Component defines a fixed color palette:
+	- `#E9B935`, `#359EE9`, `#E95335`, `#35E97B`, `#9B35E9`, `#E935A8`
+- New people are assigned color by index rotation:
+	- `colors[people.length % colors.length]`
+- This keeps avatar colors distributed and reusable after palette length is exceeded.
+
+### Validation Rules
+
+`handleAddPerson(name)` enforces:
+
+- name must not be empty after trimming
+- name length must be 20 characters or fewer.
+
+If validation fails, `error` is set and person creation is aborted.
+
+`handleOnNext(people)` enforces:
+
+- at least 2 people must exist before continuing.
+
+If rule fails, an error is shown and `onNext` is not called.
+
+### Error Message Behavior
+
+- Errors are displayed in a fixed top alert container.
+- Alert uses `role="alert"` and `aria-live="assertive"` for accessibility.
+- A `useEffect` auto-clears `error` after 4 seconds.
+- Existing timeout is cleaned up on effect re-run/unmount to avoid stale timers.
+
+### Person Lifecycle
+
+1. User types a name in controlled input.
+2. Clicking Add calls `handleAddPerson(name)`.
+3. On success, component creates a new `Person` object:
+	 - `id`: `Date.now().toString()`
+	 - `name`: entered value
+	 - `color`: rotated value from palette
+4. New person is appended to `people` state.
+5. Input field is reset and previous error is cleared.
+6. Delete action removes a person by `id` via `handleDeletePerson(personId)`.
+
+### UI Structure
+
+- Header: "Add People"
+- Top animated error banner (shows only when `error` exists)
+- Input row:
+	- text input (person name)
+	- Add button
+- Added people section:
+	- participant count (`Added People (n)`)
+	- list of cards with:
+		- color avatar (first initial)
+		- full name
+		- delete button
+- Fixed bottom menu:
+	- Back button
+	- Next button.
+
+### Navigation Actions
+
+- Back: directly calls `onBack()`.
+- Next: calls `handleOnNext(people)`; if valid, forwards local state through `onNext(people)`.
+
+### Notes
+
+- Initial `people` state is taken from `getPeople` only on first render.
+- Empty-state fallback text (`No one added yet`) is currently unreachable because empty arrays are truthy in JavaScript.
+- IDs are timestamp-based and may collide if records are created in the same millisecond.
+
 ## Style Guide
 
 ### CSS Variables
