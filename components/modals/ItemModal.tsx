@@ -19,10 +19,16 @@ export default function EditItemModal({ mode, item, onSave, onDelete, onClose }:
     const [error, setError] = useState<string | null>(null);
 
     function handleSave() {
-        if (!name || price <= 0) {
-            setError("Please enter a valid name and price for the item.");
+        if (!name) {
+            setError("Please enter a valid name for the item.");
             return;
         }
+
+        if (price <= 0 || isNaN(price)) {
+            setError("Please enter a valid price for the item.");
+            return;
+        }
+
 
         const updatedItem: BillItem = {
             id: item ? item.id : crypto.randomUUID(),
