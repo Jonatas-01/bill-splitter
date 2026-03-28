@@ -31,7 +31,7 @@ export default function EditItemModal({ mode, item, onSave, onDelete, onClose }:
 
 
         const updatedItem: BillItem = {
-            id: item ? item.id : crypto.randomUUID(),
+            id: item ? item.id : Date.now().toString(),
             name,
             price,
         };
@@ -81,7 +81,7 @@ export default function EditItemModal({ mode, item, onSave, onDelete, onClose }:
                         <input
                             type="number"
                             className="w-full font-bold text-lg px-3 py-2 bg-[#2A2311] border border-[#705818] rounded-md focus:outline-none focus:ring-2 focus:ring-[#705818]"
-                            value={price}
+                            value={price.toString()}
                             step={0.01}
                             onChange={(e) => setPrice(parseFloat(e.target.value))}
                             required
