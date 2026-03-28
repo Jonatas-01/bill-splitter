@@ -13,7 +13,7 @@ interface AssignDishesProps {
 }
 export default function AssignDishes({ people, bill, onUpdateBill, onBack, onNext }: AssignDishesProps) {
     const [error, setError] = useState<string | null>(null);
-    const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
+    const [selectedPerson, setSelectedPerson] = useState<Person | null>(people[0] || null);
 
     function handleSelectedItem(itemId: string) {
         if (!selectedPerson) {
