@@ -104,7 +104,7 @@ export default function AddPeople({ getPeople, onBack, onNext }: AddPeopleProps)
 
             <div className="mt-6">
                 <h3 className="font-bold text-2xl">Added People ({people.length})</h3>
-                {people ? (
+                {people.length > 0 ? (
                     <div className="flex flex-col gap-3 mt-2">
                         {people.map((person) => (
                             <div className="main-card flex items-center justify-between grid grid-cols-5" key={person.id}>
@@ -124,7 +124,7 @@ export default function AddPeople({ getPeople, onBack, onNext }: AddPeopleProps)
                         ))}
                     </div>
                 ) : (
-                    <div className="">
+                    <div className="flex items-center justify-center mt-10">
                         <p>No one added yet</p>
                     </div>
                 )}
