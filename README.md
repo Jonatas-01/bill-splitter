@@ -27,7 +27,7 @@ After image selection, it sends the image to the extraction API and returns stru
 
 | State | Type | Initial value | Description |
 |-------|------|---------------|-------------|
-| `isLoading` | `boolean` | `false` | Tracks active upload/extraction request; disables file inputs and shows progress text. |
+| `isLoading` | `boolean` | `false` | Tracks active upload/extraction request and switches the UI to a dedicated loading component. |
 | `error` | `string \| null` | `null` | Stores upload/extraction error message for user feedback. |
 
 ### User Flow
@@ -48,6 +48,12 @@ After image selection, it sends the image to the extraction API and returns stru
 - Success response: JSON matching `ExtractedBill`
 - Error response: JSON optionally containing `error` string
 
+### Loading Behavior
+
+- While `isLoading` is `true`, `UploadPhoto` returns `ReviewBillLoading` from `components/loadings/ReviewBillLoading`.
+- During this state, the upload form UI is not rendered; users see only the loading screen.
+- `isLoading` is always reset in `finally`, so loading UI exits on both success and error.
+
 ### UI Structure
 
 - Title area: "Add Bill"
@@ -64,8 +70,8 @@ After image selection, it sends the image to the extraction API and returns stru
 
 - Default: upload/take-photo actions are enabled.
 - Loading (`isLoading === true`):
-	- file inputs are disabled
-	- message shown: "Processing your bill..."
+	- component renders `ReviewBillLoading`
+	- upload form is replaced until request resolves.
 - Error (`error !== null`):
 	- message shown in red text with extracted/fallback error text.
 
@@ -104,11 +110,13 @@ After image selection, it sends the image to the extraction API and returns stru
 | `isItemModalOpen` | `boolean` | `false` | Controls visibility of item modal. |
 | `selectedItem` | `BillItem \| null` | `null` | Stores current item being edited. |
 | `modalMode` | `"edit" \| "add"` | `"edit"` | Determines modal behavior and action buttons. |
+| `error` | `string \| null` | `null` | Temporary top alert used when confirm is attempted with no items. |
 
 ### Lifecycle Behavior
 
 - A `useEffect` watcher syncs `billState` whenever the incoming `bill` prop changes.
 - This ensures the review screen reflects newly extracted data if parent state updates.
+- Another `useEffect` auto-clears `error` after 4 seconds and cleans up timeout on rerender/unmount.
 
 ### Derived Values
 
@@ -166,13 +174,16 @@ Modal callbacks wired by parent:
 - Add item: creates a new item and expands list.
 - Delete item: removes selected row from list.
 - Try Again: triggers `onTryAgain()` without confirming local edits.
-- Confirm: triggers `onConfirm(billState)` with latest reviewed/modified bill.
+- Confirm:
+	- if no items remain, sets error "The bill must have at least one item." and blocks continuation.
+	- otherwise triggers `onConfirm(billState)` with latest reviewed/modified bill.
 
 ### Notes
 
 - Item count and subtotal always reflect current `billState`.
 - Confirm always sends the current local state, not the original `bill` prop.
 - Currency label is rendered from `billState.currency` for consistency across rows and subtotal.
+- Error alert is rendered in a fixed top banner with `role="alert"` and `aria-live="assertive"`.
 
 ## AddPeople Component
 
@@ -275,6 +286,110 @@ If rule fails, an error is shown and `onNext` is not called.
 - Initial `people` state is taken from `getPeople` only on first render.
 - Empty-state fallback text (`No one added yet`) is currently unreachable because empty arrays are truthy in JavaScript.
 - IDs are timestamp-based and may collide if records are created in the same millisecond.
+
+## AssignDishes Component
+
+### Location
+
+- `components/AssignDishes.tsx`
+
+### Purpose
+
+`AssignDishes` maps bill items to people before split calculation. It allows users to:
+
+- select a person,
+- assign items to that person,
+- unassign items from that person,
+- track assignment progress,
+- go back, and
+- continue only when assignment rules are satisfied.
+
+### Props
+
+| Prop | Type | Required | Description |
+|------|------|----------|-------------|
+| `people` | `Person[]` | Yes | Available participants who can receive item assignments. |
+| `bill` | `ExtractedBill` | Yes | Current bill state containing item list, currency, and assignment data. |
+| `onUpdateBill` | `(bill: ExtractedBill) => void` | Yes | Called whenever item assignments change. |
+| `onBack` | `() => void` | Yes | Navigates to the previous step. |
+| `onNext` | `() => void` | Yes | Moves to the next step after validation passes. |
+
+### Internal State
+
+| State | Type | Initial value | Description |
+|-------|------|---------------|-------------|
+| `error` | `string \| null` | `null` | Temporary top alert message for invalid actions or unmet step requirements. |
+| `selectedPerson` | `Person \| null` | `null` | Currently active person used for assign/unassign interactions. |
+
+### Assignment Model
+
+- Each item stores assignees in `item.assignedTo` as an array of person names.
+- Assignment is additive: selecting a person and choosing an item appends that person name if it is not already present.
+- Unassignment only removes the currently selected person from that item.
+- Multiple people can be assigned to the same item.
+
+### Core Handlers
+
+1. `handleSelectedItem(itemId)`:
+	 - requires `selectedPerson`, otherwise shows error "Select a person first."
+	 - updates matching item by adding `selectedPerson.name` to `assignedTo`.
+	 - sends updated bill via `onUpdateBill`.
+2. `handleUnassignItem(itemId)`:
+	 - requires `selectedPerson`, otherwise shows error "Select a person first."
+	 - updates matching item by removing `selectedPerson.name` from `assignedTo`.
+	 - sends updated bill via `onUpdateBill`.
+3. `handleOnNext()`:
+	 - blocks progression if any bill item has no assignee.
+	 - blocks progression if any person has zero assigned items.
+	 - calls `onNext()` only when both checks pass.
+
+### Validation Rules Before Next
+
+- Rule 1: Every item must have at least one assignee.
+	- Error message: "Assign all items to a person."
+- Rule 2: Every person must be assigned to at least one item.
+	- Error message: "Assign at least one item to each person."
+
+### Derived Totals
+
+- `subtotal`:
+	- sum of all item prices.
+- `assignedItemsTotal`:
+	- sum of prices for items with one or more assignees.
+
+These values are displayed in the fixed bottom panel as:
+
+- primary amount: assigned total
+- secondary amount: full subtotal reference (`assigned / subtotal`).
+
+### Error Message Behavior
+
+- Error banner is fixed at the top and animated with translate/opacity transitions.
+- Uses `role="alert"` and `aria-live="assertive"`.
+- `useEffect` auto-clears error state after 4 seconds.
+- Timeout cleanup is handled during effect reruns/unmount.
+
+### UI Structure
+
+- Header: "Assign Dishes"
+- People selector row (horizontal scroll):
+	- avatar badge from person initial and color
+	- visual highlight for selected person
+- Item list for current restaurant:
+	- item name and price
+	- assignment avatars (initial badges for all assigned people)
+	- action control per item:
+		- checked button when selected person is already assigned (click to unassign)
+		- empty checkbox-like button when not assigned (click to assign)
+- Bottom fixed panel:
+	- assigned total vs subtotal
+	- Back and Next controls.
+
+### Notes
+
+- Item assignment matching is name-based (`selectedPerson.name`), not id-based.
+- Selecting no person disables assign buttons and also guards handler execution.
+- Color fallback for unknown assignee names uses `var(--color-primary-dark)`.
 
 ## Style Guide
 

@@ -76,7 +76,6 @@ export default function Home() {
                     bill={billItems}
                     onUpdateBill={(updatedBill) => {
                         setBillItems(updatedBill);
-                        console.log(updatedBill);
                     }}
                     onBack={() => setCurrentView("addPeople")}
                     onNext={() => setCurrentView("summary")}
