@@ -1,3 +1,5 @@
+import { Person } from "./person";
+
 export interface BillItem {
     id: string;
     name: string;
@@ -10,4 +12,8 @@ export interface ExtractedBill {
     items: BillItem[];
     serviceChargePercent: number;
     currency: string;
+}
+
+export interface FinalBill extends ExtractedBill {
+    people: Person[];
 }
