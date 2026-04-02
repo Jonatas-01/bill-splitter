@@ -29,8 +29,6 @@ The most important design choice is that the extracted bill acts as the source o
 
 The summary and final bill are separated on purpose. `BillSummary` is an interactive calculation screen where the service charge can still change, while `FinalBill` is the completed payload that packages the bill and people together for the final handoff. That split makes the workflow easier to reason about and keeps finalization explicit.
 
-You can find more details on the design and implementation of each component in the [Components Documentation](docs/ComponentsDoc.md).
-
 The extraction pipeline is intentionally layered. The client uploads the image to `app/api/extract`, the route validates and converts the file, `services/billExtraction.ts` handles the OCR/extraction orchestration, and `lib/gemini.ts` performs the Gemini API call. This separation keeps request handling, business logic, and external API integration isolated from each other.
 
 The assignment screen uses name-based item assignment, with `assignedTo` stored on each item as an array of person names. That makes the later summary math straightforward, because shared items can be split evenly across assigned people without introducing extra join tables or a separate mapping object.
@@ -72,14 +70,6 @@ npm run build
 - Assign dishes to one or more people.
 - Calculate service charge and final per-person totals.
 - Keep the workflow step-based so users can move back and forth safely.
-
-_Check out the individual components for more details on how each part of the flow is implemented and designed!_
-
-[Components Documentation](docs/ComponentsDoc.md)
-
-_Style Guide and design are documented separately here:_
-
-[Style Guide](docs/StyleDoc.md)
 
 ## What I'd do next
 
