@@ -69,7 +69,7 @@ export default function AddPeople({ getPeople, onBack, onNext }: AddPeopleProps)
 
     return (
         <div className="w-full pb-32">
-            <div className="flex justify-center w-full mb-4">
+            <div className="flex justify-center w-full mb-2">
                 <h1 className="main-title">Add People</h1>
             </div>
 

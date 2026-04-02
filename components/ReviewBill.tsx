@@ -81,7 +81,7 @@ export default function ReviewBill({ bill, onConfirm, onTryAgain }: ReviewBillPr
 
     return (
         <div>
-            <div className="flex justify-center w-full mb-6">
+            <div className="flex justify-center w-full mb-2">
                 <h1 className="main-title">Review Bill</h1>
             </div>
 

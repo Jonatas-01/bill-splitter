@@ -6,8 +6,8 @@ export default function ReviewBillLoading() {
 
     return (
         <div>
-            <div className="flex justify-center w-full mb-6">
-                <h1 className="main-title">Processing Bill...</h1>
+            <div className="flex justify-center w-full mb-2">
+                <h1 className="main-title">Processing Bill..</h1>
             </div>
 
             <div className="text-center mb-3 flex justify-center">
