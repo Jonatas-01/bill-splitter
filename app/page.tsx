@@ -17,6 +17,26 @@ export default function Home() {
     const [people, setPeople] = useState<Person[]>([]);
     const [finalBill, setFinalBill] = useState<FinalBill | null>(null);
 
+    // Mock data for development
+    // const [billItems, setBillItems] = useState<ExtractedBill | null>({
+    //             "restaurantName": "Pizza Express",
+    //             "items": [
+    //                 { "id": "1", "name": "Mushroom Pizza", "price": 12.99, "assignedTo": ["Alice"] },
+    //                 { "id": "2", "name": "French Fries", "price": 4.50, "assignedTo": ["Bob", "Alice"] },
+    //                 { "id": "3", "name": "Pesto & Tomato Pasta", "price": 11.99, "assignedTo": ["Charlie", "Alice"] },
+    //                 { "id": "4", "name": "Red Wine", "price": 16.50, "assignedTo": ["Alice", "Bob"] },
+    //                 { "id": "5", "name": "Mushroom Pizza", "price": 12.99, "assignedTo": ["Bob"] },
+    //                 { "id": "6", "name": "French Fries", "price": 4.50, "assignedTo": ["Bob"] },
+    //                 { "id": "7", "name": "Pesto & Tomato Pasta", "price": 11.99, "assignedTo": ["Alice", "Charlie"] },
+    //             ],
+    //             "serviceChargePercent": 10,
+    //             "currency": "£"});
+    // const [people, setPeople] = useState<Person[]>([
+    //     { "id": "1", "name": "Alice", "color": "#E9B935" },
+    //     { "id": "2", "name": "Bob", "color": "#359EE9" },
+    //     { "id": "3", "name": "Charlie", "color": "#E95335" },
+    // ]);
+
     return (
         <main className="px-3 sm:max-w-md flex flex-col items-center justify-center w-full mx-auto">
             {currentView === "upload" && (

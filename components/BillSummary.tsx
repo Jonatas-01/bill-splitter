@@ -42,6 +42,8 @@ export default function BillSummary({ bill, people, onBack, onNext }: BillSummar
             serviceChargePercent,
             people,
         };
+
+        // For later: send finalBill to database or API
         onNext(finalBill);
     }
 

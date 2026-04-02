@@ -391,6 +391,108 @@ These values are displayed in the fixed bottom panel as:
 - Selecting no person disables assign buttons and also guards handler execution.
 - Color fallback for unknown assignee names uses `var(--color-primary-dark)`.
 
+## BillSummary Component
+
+### Location
+
+- `components/BillSummary.tsx`
+
+### Purpose
+
+`BillSummary` presents the final split overview before confirmation. It lets users:
+
+- adjust the service charge percentage,
+- review how much each person owes,
+- inspect subtotal and final grand total, and
+- confirm the final bill payload.
+
+### Props
+
+| Prop | Type | Required | Description |
+|------|------|----------|-------------|
+| `bill` | `ExtractedBill` | Yes | Bill data used for subtotal, currency, item assignments, and base totals. |
+| `people` | `Person[]` | Yes | People included in the final breakdown. |
+| `onBack` | `() => void` | Yes | Navigates to the previous step. |
+| `onNext` | `(finalBill: FinalBill) => void` | Yes | Called with the completed bill summary when user confirms. |
+
+### Internal State
+
+| State | Type | Initial value | Description |
+|-------|------|---------------|-------------|
+| `serviceChargePercent` | `number` | `bill.serviceChargePercent ?? 0` | Editable service charge percentage used for totals and per-person breakdown. |
+
+### Derived Values
+
+- `subtotal`:
+	- sum of all item prices in `bill.items`.
+- `serviceChargeAmount`:
+	- `subtotal * serviceChargePercent / 100`.
+- `TotalAmount`:
+	- `subtotal + serviceChargeAmount`.
+
+### Service Charge Controls
+
+- Decrease button calls `handleDecrease()`.
+	- reduces percentage by 0.5.
+	- never goes below 0.
+- Increase button calls `handleIncrease()`.
+	- increases percentage by 0.5.
+	- never goes above 30.
+- Values are rounded to one decimal place with `toFixed(1)` during adjustment.
+- Display formatting uses `formatPercent(value)`:
+	- whole numbers show without decimal places,
+	- fractional values show one decimal place.
+
+### Breakdown Calculation
+
+For each person:
+
+1. The component finds items where `item.assignedTo` includes that person name.
+2. It computes `itemsTotal` by splitting each assigned item equally across all assignees.
+3. It calculates `serviceChargeShare` from that person's share of the items total.
+4. It renders `totalOwed` as `itemsTotal + serviceChargeShare`.
+
+This means:
+
+- shared items are divided evenly among assigned people,
+- service charge is applied proportionally to each person's item share,
+- people with no assigned items will show zero owed.
+
+### Confirmation Flow
+
+`handleOnNext()` builds a `FinalBill` object containing:
+
+- all original `bill` data,
+- the current `serviceChargePercent`, and
+- the current `people` list.
+
+That payload is passed to `onNext(finalBill)` when the user confirms.
+
+### UI Structure
+
+- Header: "Bill Summary"
+- Service charge card:
+	- editable percentage controls
+	- current fee amount preview
+- Individual Breakdown section:
+	- one card per person
+	- avatar initial and color
+	- assigned item count
+	- total owed including service charge
+- Grand Total section:
+	- subtotal
+	- service charge amount
+	- final grand total
+- Fixed bottom menu:
+	- Back button
+	- Confirm button.
+
+### Notes
+
+- The service charge state is local to this screen and starts from the bill value when present.
+- Breakdown values are recalculated on every render, so totals update immediately when the percentage changes.
+- The per-person service charge line currently uses a currency symbol in the label text, while the amount itself is rendered with `bill.currency`.
+
 ## Style Guide
 
 ### CSS Variables
