@@ -97,9 +97,9 @@ The flow progresses as follows:
 
 ## UploadPhoto Component
 
-![UploadPhoto](./public/document-images/UploadPhoto.png)
-
 ### Location
+
+![UploadPhoto](./public/document-images/MainPage.png)
 
 - `components/UploadPhoto.tsx`
 
@@ -174,7 +174,7 @@ After image selection, it sends the image to the extraction API and returns stru
 
 ### Location
 
-![ReviewBill](./public/document-images/ReviewBill.png)
+![ReviewBill](./public/document-images/ReviewBillPage.png)
 
 - `components/ReviewBill.tsx`
 
@@ -284,6 +284,8 @@ Modal callbacks wired by parent:
 
 ### Location
 
+![AddPeople](./public/document-images/AddPeoplePage.png)
+
 - `components/AddPeople.tsx`
 
 ### Purpose
@@ -385,6 +387,8 @@ If rule fails, an error is shown and `onNext` is not called.
 ## AssignDishes Component
 
 ### Location
+
+![AssignDishes](./public/document-images/AssignDishesPage.png)
 
 - `components/AssignDishes.tsx`
 
@@ -489,6 +493,8 @@ These values are displayed in the fixed bottom panel as:
 ## BillSummary Component
 
 ### Location
+
+| ![BillSummary](./public/document-images/BillSummaryPage1.png) | ![BillSummary2](./public/document-images/BillSummaryPage2.png) |
 
 - `components/BillSummary.tsx`
 
