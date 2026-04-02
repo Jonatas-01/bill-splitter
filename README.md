@@ -12,7 +12,7 @@ Bill Splitter solves the awkward, repetitive part of splitting a restaurant bill
 
 There is no public live demo deployed yet.
 
-## Tech Stack & Why
+## Tech Stack
 
 - Next.js 16 App Router: the app benefits from a clean server/client split, file-based routing, and easy API route co-location for the extraction endpoint.
 - React 19: the UI is entirely state-driven and step-based, which fits React’s component model well for orchestrating the workflow.
