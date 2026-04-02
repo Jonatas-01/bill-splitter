@@ -519,3 +519,11 @@ The application uses CSS custom properties defined in `app/globals.css` with aut
 | Variable | Value | Usage |
 |----------|-------|-------|
 | `--border-radius` | `16px` | Default border radius |
+
+## Future Improvements
+
+- Implement persistent storage (e.g., localStorage or backend) for bill data and people list to survive page reloads.
+- Add user authentication and multi-session support for saving past bills and sharing with others.
+- Enhance error handling with more specific messages based on API error codes.
+- Add unit tests for core components and handlers to ensure reliability during refactors.
+- Create final page design with possibility to share or export the final bill summary using dom-to-image library.
