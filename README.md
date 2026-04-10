@@ -2,7 +2,7 @@
 
 Bill Splitter is a bill-splitting app that turns a receipt photo into a reviewed item list, lets you assign dishes to people, and calculates the final totals with service charge.
 
-_Add a screenshot or short GIF of the app in action here._
+
 
 ## What is this?
 
