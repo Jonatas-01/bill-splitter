@@ -2,24 +2,13 @@
 
 Bill Splitter is a bill-splitting app that turns a receipt photo into a reviewed item list, lets you assign dishes to people, and calculates the final totals with service charge.
 
-
-
-## What is this?
+![Bill Splitter GIF](../public/document-images/AppGif.gif)
 
 Bill Splitter solves the awkward, repetitive part of splitting a restaurant bill after the meal. A user uploads a receipt, reviews the extracted items, adds the people at the table, assigns dishes, and gets a final per-person breakdown without doing the arithmetic manually. The core mechanic is a guided multi-step flow that keeps the extracted bill as the source of truth while the user refines it step by step.
 
 ## Live Demo
 
 There is no public live demo deployed yet.
-
-## Tech Stack
-
-- Next.js 16 App Router: the app benefits from a clean server/client split, file-based routing, and easy API route co-location for the extraction endpoint.
-- React 19: the UI is entirely state-driven and step-based, which fits React’s component model well for orchestrating the workflow.
-- TypeScript: the bill, item, person, and final bill shapes are central to the app, so strong types help keep state transitions and props consistent.
-- Tailwind CSS v4: styling is utility-based and fast to iterate on, which works well for a small interactive product with multiple screens and shared UI primitives.
-- Gemini 2.5 Flash: the app uses Gemini Flash for multimodal receipt extraction because it is fast, practical for image parsing, and returns structured JSON from the receipt image.
-- React Icons: the interface uses lightweight iconography for camera, edit, navigation, delete, and progress affordances without bringing in a large UI kit.
 
 ## Architecture / Key Design Decisions
 
@@ -77,9 +66,72 @@ _Check out the individual components for more details on how each part of the fl
 
 [Components Documentation](docs/ComponentsDoc.md)
 
-_Style Guide and design are documented separately here:_
+## Style Guide & Design
 
-[Style Guide](docs/StyleDoc.md)
+### CSS Variables
+
+The application uses CSS custom properties defined in `app/globals.css` for the dark theme.
+
+#### Colors
+
+| Variable                   | Value       | Usage                                      |
+| -------------------------- | ----------- | ------------------------------------------ |
+| `--color-primary`          | `#e9b935`   | Primary accent color                       |
+| `--color-primary-dark`     | `#e9b9352f` | Dark variant of primary                    |
+| `--color-bg-primary`       | `#110a04`   | Main background                            |
+| `--color-bg-secondary`     | `#1d1d1d`   | Secondary background (e.g., cards, modals) |
+| `--color-bg-tertiary`      | `#313131`   | Tertiary background                        |
+| `--color-text-primary`     | `#ffffff`   | Main text                                  |
+| `--color-text-secondary`   | `#919191`   | Secondary text                             |
+| `--color-text-tertiary`    | `#6d6d6d`   | Muted text                                 |
+| `--color-border-primary`   | `#383838`   | Primary borders                            |
+| `--color-border-secondary` | `#6D6D6D`   | Secondary borders                          |
+
+#### Layout
+
+| Variable          | Value  | Usage                 |
+| ----------------- | ------ | --------------------- |
+| `--border-radius` | `16px` | Default border radius |
+
+### Font
+
+The app uses the Space Grotesk font from Google Fonts, imported in `app/layout.tsx`:
+
+```tsx
+import { Space_Grotesk } from "next/font/google";
+const spaceGrotesk = Space_Grotesk({
+    subsets: ["latin"],
+    weight: ["400", "500", "600", "700"],
+});
+```
+
+### Design
+
+The design was made using Figma, with a focus on a dark theme and a clean, modern aesthetic. The color palette is centered around a warm gold accent (`#e9b935`) against dark backgrounds, with white and gray text for readability. The UI uses ample spacing, rounded corners, and simple iconography to create an approachable and user-friendly experience. The layout is responsive and optimized for mobile devices, with a vertical flow that guides users through the bill splitting process step by step.
+
+## Challenges & Solutions
+
+- **Challenge**: Parsing diverse receipt formats accurately with Gemini.
+    - **Solution**: Implemented a flexible extraction pipeline that normalizes Gemini's output into a consistent bill structure, and added a review step for users to correct any parsing errors before proceeding.
+- **Challenge**: Managing state across multiple steps without a global store.
+    - **Solution**: Kept all shared state (bill, people, final output) in the top-level `app/page.tsx` component and passed it down as props to each step. This way, the flow remains linear and easy to follow without introducing additional complexity from a state management library.
+- **Challenge**: Assigning dishes to multiple people and calculating splits correctly.
+    - **Solution**: Used an `assignedTo` array on each item to track which people are sharing it. During the summary calculation, the app divides the item cost by the number of assigned people to get the correct split for shared dishes.
+
+## Bugs
+
+- **API route location bug**: the extraction endpoint needed to live under the App Router path, not a top-level API folder. The current app now has it in `route.ts`.
+
+- **Uploaded image MIME type bug**: the app should forward the real uploaded file MIME type all the way through to Gemini instead of hardcoding image/jpeg. The current flow shows that fix in `route.ts`, `billExtraction.ts`, and `gemini.ts`.
+
+## Tech Stack
+
+- Next.js 16 App Router: the app benefits from a clean server/client split, file-based routing, and easy API route co-location for the extraction endpoint.
+- React 19: the UI is entirely state-driven and step-based, which fits React’s component model well for orchestrating the workflow.
+- TypeScript: the bill, item, person, and final bill shapes are central to the app, so strong types help keep state transitions and props consistent.
+- Tailwind CSS v4: styling is utility-based and fast to iterate on, which works well for a small interactive product with multiple screens and shared UI primitives.
+- Gemini 2.5 Flash: the app uses Gemini Flash for multimodal receipt extraction because it is fast, practical for image parsing, and returns structured JSON from the receipt image.
+- React Icons: the interface uses lightweight iconography for camera, edit, navigation, delete, and progress affordances without bringing in a large UI kit.
 
 ## What I'd do next
 
@@ -88,3 +140,4 @@ _Style Guide and design are documented separately here:_
 - Enhance error handling with more specific messages based on API error codes.
 - Add unit tests for core components and handlers to ensure reliability during refactors.
 - Create final page design with possibility to share or export the final bill summary using dom-to-image library.
+- 404 and error pages for better UX when navigating to invalid routes or encountering server issues.
